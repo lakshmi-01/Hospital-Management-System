@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package admin;
+package Patient;
 
 import com.toedter.calendar.JDateChooser;
 import database.DatabaseOperation;
-
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -15,7 +9,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -124,7 +117,7 @@ public class PatUpdate extends JFrame {
         back_jbt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new updateid();
+                new ViewDetails(id);
                 setVisible(false);
             }
         });
@@ -204,7 +197,7 @@ public class PatUpdate extends JFrame {
                         String address = address_txt.getText();
                         String district = dist_txt.getText();
 
-                        Connection con=DatabaseOperation.getConnection();
+                        Connection con = DatabaseOperation.getConnection();
 
                         String query = "update patient set name=?,ph_no=?,age=?,gender=?,bloodgrp=?,address=?,district=?,appointment=? where id=?";
                         PreparedStatement pdmt = con.prepareStatement(query);
@@ -274,7 +267,7 @@ public class PatUpdate extends JFrame {
         //FETCHING FROM DATABASE
         try {
 
-            Connection con=DatabaseOperation.getConnection();
+            Connection con = DatabaseOperation.getConnection();
             String query = "select name,ph_no,age,gender,bloodgrp,appointment,address,district from patient where id=?";
             PreparedStatement pstmt = con.prepareStatement(query);
 

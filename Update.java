@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package admin;
+package Doctor;
+
+
 import database.DatabaseOperation;
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.regex.Pattern;
@@ -28,7 +29,7 @@ public class Update extends JFrame implements ActionListener{
         co.setLayout(null);
         setTitle("Update");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         iback = new ImageIcon("img\\diagnosis\\back.png");
+         iback = new ImageIcon("img\\doctor\\back.png");
         back = new JButton(iback);
         iback.setImageObserver(back);
         back.setBounds(10, 10, 75, 75);
@@ -42,7 +43,7 @@ public class Update extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
             
-              new docpage();
+              new Page(int_id);
                 setVisible(false);
             }
         });
@@ -120,7 +121,7 @@ public class Update extends JFrame implements ActionListener{
          txt_dateofjoining.setFont(new Font("High Tower Text",Font.ITALIC,15));
          
          
-         jbtn_submit.setBounds(500,600,100,50);
+         jbtn_submit.setBounds(500,600,60,50);
          jbtn_submit.addActionListener(this);
          co.setBackground(Color.decode("#EBF2FB"));
         
@@ -152,7 +153,8 @@ public class Update extends JFrame implements ActionListener{
                         
                         // JOptionPane.showMessageDialog(this," "+int_eid);
 
-                       Connection con=DatabaseOperation.getConnection();
+                        Connection con=DatabaseOperation.getConnection();
+
                         String query="select name,email,password,mobile,address,qualification,gender,bloodgroup,dateofjoining from doctor_details where id=?";
                         PreparedStatement pstmt=con.prepareStatement(query);
                         pstmt.setString(1,int_id);
@@ -192,24 +194,25 @@ public class Update extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent ae){
         
         Object obj_source=ae.getSource();
-        txt_name.setEditable(false);
-        txt_dateofjoining.setEditable(false);
-        txt_gender.setEditable(false);
-        txt_blood_group.setEditable(false);
-
+        
         if(obj_source==jbtn_submit){
+             txt_id.setEditable(false);
+            txt_name.setEditable(false);
+            txt_dateofjoining.setEditable(false);
+            txt_gender.setEditable(false);
+            txt_blood_group.setEditable(false);
 
         try{
-
+           
                    
                    Connection con=DatabaseOperation.getConnection();
-                   if(!Pattern.matches("[A-zA-z\\s]*", txt_name.getText())){
-                        JOptionPane.showMessageDialog(null,"Please enter a valid name","Error",JOptionPane.ERROR_MESSAGE);
-                    }
-                    if(!Pattern.matches("[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}",txt_dateofjoining.getText())){
+                   //if(!Pattern.matches("[A-Z][a-z]*", txt_name.getText())){
+                     //   JOptionPane.showMessageDialog(null,"Please enter a valid name","Error",JOptionPane.ERROR_MESSAGE);
+                    //}
+                    /*if(!Pattern.matches("[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}",txt_dateofjoining.getText())){
                     JOptionPane.showMessageDialog(null, "Please enter in the format yyyy-MM-dd ", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                else if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txt_email.getText()))) {
+                }*/
+                if (!(Pattern.matches("^[a-zA-Z0-9]+[@]{1}+[a-zA-Z0-9]+[.]{1}+[a-zA-Z0-9]+$", txt_email.getText()))) {
                     JOptionPane.showMessageDialog(null, "Please enter a valid email", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else if(!Pattern.matches("[789]{1}[0-9]{9}", txt_mobile.getText())){
@@ -221,16 +224,15 @@ public class Update extends JFrame implements ActionListener{
                 else if(txt_blood_group.getText()==null){
                     JOptionPane.showMessageDialog(null,"Please enter the blood group","Error",JOptionPane.ERROR_MESSAGE);
                 }
-                else if(!Pattern.matches("[a-zA-z\\s,]*",txt_qualification.getText())){
+                else if(!Pattern.matches("[A-Z]*[a-z]*",txt_qualification.getText())){
                      JOptionPane.showMessageDialog(null,"Please enter a valid qualification","Error",JOptionPane.ERROR_MESSAGE);
                 }
                
-                    else if(!Pattern.matches("^[#.0-9a-zA-Z\\s,-]+$", txt_address.getText())){
-                       JOptionPane.showMessageDialog(null,"Please enter a valid address\n"+
-                               "(of the form Door number Street Name State\n)","Error",JOptionPane.ERROR_MESSAGE);
+                    else if(!Pattern.matches("^[#.0-9\\a-zA-Z\\s,-]+$", txt_address.getText())){
+                       JOptionPane.showMessageDialog(null,"Please enter a valid address\n","Error",JOptionPane.ERROR_MESSAGE);
                     }
                 
-               else if(!Pattern.matches("^(?=.*[0-9])"+ "(?=.*[a-z])(?=.*[A-Z])"+ "(?=.*[@#$%^&+=])"+ "(?=\\S+$).{8,20}$",txt_password.getText())){
+               else if(!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",txt_password.getText())){
                     JOptionPane.showMessageDialog(null,"Please enter a valid password(Must have atleast one numeric character,\n"+
                             "one lowercase character ,at least one uppercase character\n"
                             + "at least one special symbol among @#$%\n" 
@@ -263,10 +265,5 @@ public class Update extends JFrame implements ActionListener{
 
         }
     }
-    
-
-
-    
+  
 }
-
-

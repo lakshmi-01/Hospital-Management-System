@@ -3,20 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package admin;
+package Doctor;
 
 import database.DatabaseOperation;
-import java.awt.Container;
-import java.awt.TextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.*;
-import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -33,7 +27,7 @@ public class View extends JFrame{
         setTitle("VIEW");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-         iback = new ImageIcon("img\\diagnosis\\back.png");
+         iback = new ImageIcon("img\\doctor\\back.png");
         back = new JButton(iback);
         iback.setImageObserver(back);
         back.setBounds(10, 10, 75, 75);
@@ -46,7 +40,7 @@ public class View extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
             
-              new docpage();
+              new Page(int_id);
                 setVisible(false);
             }
         });
@@ -193,5 +187,6 @@ public class View extends JFrame{
         setVisible(true);
     }
     
-}  
+}
 
+   

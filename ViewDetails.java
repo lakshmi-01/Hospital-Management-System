@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package admin;
+package Patient;
 
 import database.DatabaseOperation;
 import java.awt.Color;
@@ -13,7 +8,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,7 +25,7 @@ public class ViewDetails extends JFrame {
     Container co;
     JLabel id_lbl, name_lbl, phno_lbl, age_lbl, gen_lbl, bldgrp_lbl, address_lbl, dist_lbl, apoint_lbl, symp_lbl, doctName_lbl, lbg;
     JTextField id_txt, name_txt, age_txt, phno_txt, address_txt,apt_date,bldgrp_jcb, dist_jcb, doctName_jcb,gender;
-    JButton back;
+    JButton update_jbt,back;
     ImageIcon bg,iback;
     JTextArea symp_txt;
     Font text = new Font("Cascadia Code", Font.PLAIN, 18);
@@ -51,7 +45,7 @@ public class ViewDetails extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new patview();
+                new PatientView();
                 setVisible(false);
             }
         });
@@ -88,6 +82,8 @@ public class ViewDetails extends JFrame {
         //TextArea
         symp_txt = new JTextArea();
 
+        //BUTTONS
+        update_jbt = new JButton("Update");
 
         //SETTING BOUNDS FOR THE COMPONENTS
         //LABELS
@@ -118,6 +114,9 @@ public class ViewDetails extends JFrame {
         apt_date.setBounds(890, 375, 210, 27);
         symp_txt.setBounds(890, 440, 250, 60);
         doctName_jcb.setBounds(890, 535, 120, 25);
+
+        //BUTTONS
+        update_jbt.setBounds(545, 640, 130, 50);
 
         //SETTING FONTS AND COLORS FOR LABELS
         id_lbl.setFont(new Font("Century Gothic", Font.BOLD, 20));
@@ -181,6 +180,9 @@ public class ViewDetails extends JFrame {
         doctName_jcb.setEditable(false);
         gender.setEditable(false);
 
+        //BUTTON
+        update_jbt.setFont(text);
+
         //ADDING TO FRAMES
         add(id_lbl);
         add(name_lbl);
@@ -204,9 +206,11 @@ public class ViewDetails extends JFrame {
         add(doctName_jcb);
         add(apt_date);
         add(symp_txt);
+        add(update_jbt);
 
         try {
-            Connection con=DatabaseOperation.getConnection();
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection con = DatabaseOperation.getConnection();
             Statement st = con.createStatement();
             String query = "select * from patient where id='" + id + "'";
             ResultSet res = st.executeQuery(query);
@@ -231,19 +235,25 @@ public class ViewDetails extends JFrame {
                 }
             }
             con.setAutoCommit(true);
-        } catch (Exception ex) {
+        } catch (HeadlessException | ClassNotFoundException | NumberFormatException | SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         
+        update_jbt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new PatUpdate(id);
+                setVisible(false);
+            }
+        });
         
         co = getContentPane();
         co.setBackground(Color.decode("#d1eaf0"));
         co.setLayout(null);
         co.add(lbg);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100,100,1250, 800);
+        setBounds(100, 100, 1250, 800);
         setTitle("Patient Details");
         setVisible(true);
     }
-
 }
